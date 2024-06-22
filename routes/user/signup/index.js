@@ -7,7 +7,7 @@ const schema = Joi.object({
   first_name: Joi.string().required(),
   last_name: Joi.string().required(),
   email: Joi.string().email().required(),
-  password: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{6,30}$")),
+  password: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{6,30}$")).required(),
 });
 
 const signUpUser = async (req, res) => {
