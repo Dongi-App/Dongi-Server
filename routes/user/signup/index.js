@@ -12,15 +12,18 @@ const schema = Joi.object({
 });
 
 const signUpUser = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, username } = req.body;
   try {
     await schema.validateAsync(req.body);
 
-    const check_user_exist = await findOne("user", { email });
-    if (check_user_exist) {
-      return res
-        .status(404)
-        .send({ status: 404, message: "User already exist!" });
+    const check_user_exist_by_email = await findOne("user", { email });
+    if (check_user_exist_by_email) {
+      throw new Error("email already exist")
+    }
+
+    const check_user_exist_by_username = await findOne("user", { username });
+    if (check_user_exist_by_username) {
+      throw new Error("username already exist")
     }
 
     const new_user = {
