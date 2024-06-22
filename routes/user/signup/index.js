@@ -6,24 +6,18 @@ const Joi = require("joi");
 const schema = Joi.object({
   first_name: Joi.string().required(),
   last_name: Joi.string().required(),
-  username: Joi.string().required(),
   email: Joi.string().email().required(),
   password: Joi.string().pattern(new RegExp("^[a-zA-Z0-9]{6,30}$")),
 });
 
 const signUpUser = async (req, res) => {
-  const { email, password, username } = req.body;
+  const { email, password } = req.body;
   try {
     await schema.validateAsync(req.body);
 
     const check_user_exist_by_email = await findOne("user", { email });
     if (check_user_exist_by_email) {
       throw new Error("email already exist")
-    }
-
-    const check_user_exist_by_username = await findOne("user", { username });
-    if (check_user_exist_by_username) {
-      throw new Error("username already exist")
     }
 
     const new_user = {

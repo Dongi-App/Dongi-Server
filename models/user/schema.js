@@ -11,10 +11,6 @@ const userSchema = new mongoose.Schema(
       type: schemaType.TypeString,
       required: true,
     },
-    username: {
-      type: schemaType.TypeString,
-      required: true,
-    },
     email: {
       type: schemaType.TypeString,
       required: true,
@@ -32,7 +28,6 @@ userSchema.method("serializer", function () {
   return {
     first_name: this.first_name,
     last_name: this.last_name,
-    username: this.username,
     email: this.email,
   };
 });
