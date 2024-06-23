@@ -8,10 +8,12 @@ const { tokenVerification } = require("../../middleware");
 const signUp = require("./signup");
 const login = require("./login");
 const logout = require("./logout");
+const update = require("./update");
 
 // register routes
 router.post("/signup", signUp);
 router.post("/login", login);
 router.post("/logout", [tokenVerification, logout]);
+router.post("/update", [tokenVerification, update]);
 
 module.exports = router;
