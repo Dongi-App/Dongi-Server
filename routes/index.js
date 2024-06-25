@@ -4,6 +4,7 @@ const express = require("express");
 const user = require("./user");
 const group = require("./group");
 const invitation = require("./invitation");
+const expense = require("./expense");
 
 // init express router
 const router = express.Router();
@@ -12,5 +13,6 @@ const router = express.Router();
 router.use("/user", user);
 router.use("/group", group);
 router.use("/invitation", invitation);
+router.use("/expense", expense);
 
 module.exports = router;
