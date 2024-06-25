@@ -15,8 +15,12 @@ const updateDocument = async (modelDb, updateQuery, setQuery) =>
     { new: true }
   );
 
+const deleteDocument = async (modelDb, deleteQuery) =>
+  await Models[modelDb].deleteOne(deleteQuery);
+
 module.exports = {
   findOne,
   insertNewDocument,
   updateDocument,
+  deleteDocument,
 };
