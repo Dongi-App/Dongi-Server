@@ -1,7 +1,11 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { JWT_SECRET } = require("../../../config");
-const { insertNewDocument, findOne } = require("../../../helpers");
+const {
+  insertNewDocument,
+  findOne,
+  emailSerializer,
+} = require("../../../helpers");
 const Joi = require("joi");
 const schema = Joi.object({
   first_name: Joi.string().required(),
@@ -11,13 +15,15 @@ const schema = Joi.object({
 });
 
 const signUpUser = async (req, res) => {
-  const { email, password } = req.body;
+  let { email, password } = req.body;
+  email = emailSerializer(email);
+
   try {
     await schema.validateAsync(req.body);
 
     const check_user_exist_by_email = await findOne("user", { email });
     if (check_user_exist_by_email) {
-      throw new Error("email already exist")
+      throw new Error("email already exist");
     }
 
     const new_user = {

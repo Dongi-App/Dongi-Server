@@ -18,9 +18,14 @@ const updateDocument = async (modelDb, updateQuery, setQuery) =>
 const deleteDocument = async (modelDb, deleteQuery) =>
   await Models[modelDb].deleteOne(deleteQuery);
 
+const emailSerializer = (email) => {
+  return email.toLowerCase();
+};
+
 module.exports = {
   findOne,
   insertNewDocument,
   updateDocument,
   deleteDocument,
+  emailSerializer
 };

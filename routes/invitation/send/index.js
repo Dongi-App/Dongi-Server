@@ -1,4 +1,8 @@
-const { insertNewDocument, findOne } = require("../../../helpers");
+const {
+  insertNewDocument,
+  findOne,
+  emailSerializer,
+} = require("../../../helpers");
 const Joi = require("joi");
 
 const schema = Joi.object({
@@ -7,7 +11,9 @@ const schema = Joi.object({
 });
 
 const sendInvitation = async (req, res) => {
-  const { user_email, group_id } = req.body;
+  let { user_email, group_id } = req.body;
+  user_email = emailSerializer(user_email);
+
   try {
     await schema.validateAsync(req.body);
 
