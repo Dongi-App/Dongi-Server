@@ -24,6 +24,7 @@ const updateUser = async (req, res) => {
 
     return res.status(200).send({ user: user.serializer() });
   } catch (e) {
+    console.log(e);
     return res.status(400).send({ message: e.message });
   }
 };

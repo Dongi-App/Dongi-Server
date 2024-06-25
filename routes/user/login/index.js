@@ -25,6 +25,7 @@ const loginUser = async (req, res) => {
       throw new Error("invalid email or password");
     }
   } catch (e) {
+    console.log(e);
     res.status(400).send({ message: e.message });
   }
 };

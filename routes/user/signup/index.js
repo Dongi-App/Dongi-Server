@@ -1,10 +1,7 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { JWT_SECRET } = require("../../../config");
-const {
-  insertNewDocument,
-  findOne,
-} = require("../../../helpers");
+const { insertNewDocument, findOne } = require("../../../helpers");
 const { emailSerializer } = require("../../../utils");
 const Joi = require("joi");
 const schema = Joi.object({
@@ -34,6 +31,7 @@ const signUpUser = async (req, res) => {
     let token = jwt.sign({ id: user._id }, JWT_SECRET);
     return res.status(200).send({ user: user.serializer(), token });
   } catch (e) {
+    console.log(e);
     return res.status(400).send({ message: e.message });
   }
 };
