@@ -13,7 +13,7 @@ const removeGroup = async (req, res) => {
     // check membership
     const membership = await findOne("membership", {
       group: id,
-      user: req.user._id,
+      user: req.user.email,
     });
     if (!membership) {
       throw new Error("you are not a member of this group");
