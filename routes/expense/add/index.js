@@ -49,7 +49,7 @@ const addExpense = async (req, res) => {
     // create shares
     for (const share of shares) {
       const shareObject = await insertNewDocument("share", {
-        group,
+        expense: expenseObject._id,
         user: share.user,
         share: share.share,
       });

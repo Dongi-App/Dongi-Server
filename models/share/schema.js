@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const schemaType = require("../../types");
 
 const shareSchema = new mongoose.Schema({
-  group: {
+  expense: {
     type: schemaType.TypeString,
     required: true,
   },
@@ -18,7 +18,7 @@ const shareSchema = new mongoose.Schema({
 
 shareSchema.method("serializer", function () {
   return {
-    group: this.group,
+    expense: this.expense,
     user: this.user,
     share: +this.share,
   };
