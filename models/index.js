@@ -7,5 +7,7 @@ db.mongoose = mongoose;
 
 db.user = require("./user");
 db.expiredToken = require("./expired_token");
+db.group = require("./group");
+db.membership = require("./membership");
 
 module.exports = db;
