@@ -1,6 +1,9 @@
 const Models = require("../models");
 
 const checkMembership = async (group, user) => {
+  if (!group || !user) {
+    throw new Error(`user is not a member of group`);
+  }
   const membership = await findOne("membership", {
     group,
     user,
