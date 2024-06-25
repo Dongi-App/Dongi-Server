@@ -1,9 +1,4 @@
-const {
-  insertNewDocument,
-  checkMembership,
-  findOne,
-  deleteDocument,
-} = require("../../../helpers");
+const { checkExpenseOwnership, deleteDocument } = require("../../../helpers");
 const Joi = require("joi");
 
 const schema = Joi.object({
@@ -16,15 +11,7 @@ const removeExpense = async (req, res) => {
     await schema.validateAsync(req.body);
 
     // check if expense belongs to one of user's group
-    const expense = await findOne("expense", {
-      _id: expense_id,
-    });
-    const group = await findOne("group", {
-      _id: expense?.group,
-    });
-    await checkMembership(group?._id, req.user.email).catch(() => {
-      throw new Error("can't remove expense");
-    });
+    await checkExpenseOwnership(expense_id, req.user.email);
 
     // delete shares
     await deleteDocument("share", {
