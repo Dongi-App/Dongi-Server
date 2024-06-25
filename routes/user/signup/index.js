@@ -4,8 +4,8 @@ const { JWT_SECRET } = require("../../../config");
 const {
   insertNewDocument,
   findOne,
-  emailSerializer,
 } = require("../../../helpers");
+const { emailSerializer } = require("../../../utils");
 const Joi = require("joi");
 const schema = Joi.object({
   first_name: Joi.string().required(),

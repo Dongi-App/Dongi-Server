@@ -2,8 +2,8 @@ const {
   insertNewDocument,
   findOne,
   deleteDocument,
-  boolSerializer,
 } = require("../../../helpers");
+const { boolSerializer } = require("../../../utils");
 const Joi = require("joi");
 
 const schema = Joi.object({
