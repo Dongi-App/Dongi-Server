@@ -8,10 +8,12 @@ const { tokenVerification } = require("../../middleware");
 const add = require("./add");
 const leave = require("./leave");
 const remove = require("./remove");
+const update = require("./update");
 
 // register routes
 router.post("/add", [tokenVerification, add]);
 router.post("/leave", [tokenVerification, leave]);
 router.post("/remove", [tokenVerification, remove]);
+router.post("/update", [tokenVerification, update]);
 
 module.exports = router;
