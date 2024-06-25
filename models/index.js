@@ -9,5 +9,6 @@ db.user = require("./user");
 db.expiredToken = require("./expired_token");
 db.group = require("./group");
 db.membership = require("./membership");
+db.invitation = require("./invitation");
 
 module.exports = db;
