@@ -30,12 +30,13 @@ const expenseSchema = new mongoose.Schema({
 
 expenseSchema.method("serializer", function () {
   return {
+    id: this._id,
     group: this.group,
     payer: this.payer,
     description: this.description,
     amount: +this.amount,
     total_shares: +this.total_shares,
-    date: new Date(this.date).toISOString().split('T')[0]
+    date: new Date(this.date).toISOString().split("T")[0],
   };
 });
 
