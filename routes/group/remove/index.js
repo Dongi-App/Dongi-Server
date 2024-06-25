@@ -1,4 +1,8 @@
-const { findOne, deleteDocument } = require("../../../helpers");
+const {
+  findOne,
+  deleteDocument,
+  checkMembership,
+} = require("../../../helpers");
 const Joi = require("joi");
 
 const schema = Joi.object({
@@ -11,13 +15,7 @@ const removeGroup = async (req, res) => {
     await schema.validateAsync(req.body);
 
     // check membership
-    const membership = await findOne("membership", {
-      group: id,
-      user: req.user.email,
-    });
-    if (!membership) {
-      throw new Error("you are not a member of this group");
-    }
+    await checkMembership(id, req.user.email);
 
     // delete all memberships
     await deleteDocument("membership", { group: id });

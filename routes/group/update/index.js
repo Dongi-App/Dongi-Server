@@ -1,4 +1,8 @@
-const { findOne, updateDocument } = require("../../../helpers");
+const {
+  findOne,
+  updateDocument,
+  checkMembership,
+} = require("../../../helpers");
 const Joi = require("joi");
 
 const schema = Joi.object({
@@ -12,13 +16,7 @@ const updateGroup = async (req, res) => {
     await schema.validateAsync(req.body);
 
     // check membership
-    const membership = await findOne("membership", {
-      group: id,
-      user: req.user.email,
-    });
-    if (!membership) {
-      throw new Error("you are not a member of this group");
-    }
+    await checkMembership(id, req.user.email);
 
     // update group
     const group = await updateDocument("group", { _id: id }, { name });

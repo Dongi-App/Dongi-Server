@@ -1,5 +1,15 @@
 const Models = require("../models");
 
+const checkMembership = async (group, user) => {
+  const membership = await findOne("membership", {
+    group,
+    user,
+  });
+  if (!membership) {
+    throw new Error(`user (${user}) is not a member of group (${group})`);
+  }
+};
+
 const findOne = async (modelDb, queryObj) =>
   await Models[modelDb].findOne(queryObj).exec();
 
@@ -19,6 +29,7 @@ const deleteDocument = async (modelDb, deleteQuery) =>
   await Models[modelDb].deleteOne(deleteQuery);
 
 module.exports = {
+  checkMembership,
   findOne,
   insertNewDocument,
   updateDocument,

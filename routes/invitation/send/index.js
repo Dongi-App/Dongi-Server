@@ -1,6 +1,7 @@
 const {
   insertNewDocument,
   findOne,
+  checkMembership,
 } = require("../../../helpers");
 const { emailSerializer } = require("../../../utils");
 const Joi = require("joi");
@@ -12,19 +13,13 @@ const schema = Joi.object({
 
 const sendInvitation = async (req, res) => {
   let { user_email, group_id } = req.body;
-  
+
   try {
     await schema.validateAsync(req.body);
     user_email = emailSerializer(user_email);
 
     // check from membership
-    const fromMembership = await findOne("membership", {
-      group: group_id,
-      user: req.user.email,
-    });
-    if (!fromMembership) {
-      throw new Error("you are not a member of this group");
-    }
+    await checkMembership(group_id, req.user.email);
 
     // check self request
     if (user_email == req.user.email) {
