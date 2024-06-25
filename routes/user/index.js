@@ -13,7 +13,7 @@ const update = require("./update");
 // register routes
 router.post("/signup", signUp);
 router.post("/login", login);
-router.post("/logout", [tokenVerification, logout]);
+router.delete("/logout", [tokenVerification, logout]);
 router.post("/update", [tokenVerification, update]);
 
 module.exports = router;
