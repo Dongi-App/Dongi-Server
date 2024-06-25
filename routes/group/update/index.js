@@ -6,7 +6,7 @@ const schema = Joi.object({
   id: Joi.string().required(),
 });
 
-const addGroup = async (req, res) => {
+const updateGroup = async (req, res) => {
   const { name, id } = req.body;
   try {
     await schema.validateAsync(req.body);
@@ -30,4 +30,4 @@ const addGroup = async (req, res) => {
   }
 };
 
-module.exports = addGroup;
+module.exports = updateGroup;
