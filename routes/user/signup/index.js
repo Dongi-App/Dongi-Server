@@ -13,10 +13,10 @@ const schema = Joi.object({
 
 const signUpUser = async (req, res) => {
   let { email, password } = req.body;
-  email = emailSerializer(email);
 
   try {
     await schema.validateAsync(req.body);
+    email = emailSerializer(email);
 
     const check_user_exist_by_email = await findOne("user", { email });
     if (check_user_exist_by_email) {

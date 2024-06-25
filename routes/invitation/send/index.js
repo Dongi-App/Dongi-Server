@@ -12,10 +12,10 @@ const schema = Joi.object({
 
 const sendInvitation = async (req, res) => {
   let { user_email, group_id } = req.body;
-  user_email = emailSerializer(user_email);
-
+  
   try {
     await schema.validateAsync(req.body);
+    user_email = emailSerializer(user_email);
 
     // check from membership
     const fromMembership = await findOne("membership", {
