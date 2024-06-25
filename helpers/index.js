@@ -2,7 +2,7 @@ const Models = require("../models");
 
 const checkMembership = async (group, user) => {
   if (!group || !user) {
-    throw new Error(`user is not a member of group`);
+    throw new Error("user is not a member of group");
   }
   const membership = await findOne("membership", {
     group,
@@ -12,6 +12,23 @@ const checkMembership = async (group, user) => {
     throw new Error(`user (${user}) is not a member of group (${group})`);
   }
 };
+
+const checkExpenseOwnership = async (expense_id, user) => {
+  const expense = await findOne("expense", {
+    _id: expense_id,
+  });
+  const group = await findOne("group", {
+    _id: expense?.group,
+  });
+  await checkMembership(group?._id, user).catch(() => {
+    throw new Error("can't access expense");
+  });
+
+  return [expense, group];
+};
+
+const find = async (modelDb, queryObj) =>
+  await Models[modelDb].find(queryObj).exec();
 
 const findOne = async (modelDb, queryObj) =>
   await Models[modelDb].findOne(queryObj).exec();
@@ -33,6 +50,8 @@ const deleteDocument = async (modelDb, deleteQuery) =>
 
 module.exports = {
   checkMembership,
+  checkExpenseOwnership,
+  find,
   findOne,
   insertNewDocument,
   updateDocument,
