@@ -5,7 +5,7 @@ const { findOne } = require("../../helpers");
 const tokenVerification = (req, res, next) => {
   let token = req.headers["token"];
   if (!token) {
-    throw new Error("token is not provided");
+    return res.status(400).send({ message: "token is not provided" });
   }
 
   jwt
@@ -14,7 +14,7 @@ const tokenVerification = (req, res, next) => {
         throw new Error("token unauthorized");
       }
       const is_token_expired = !!(await findOne("expiredToken", { token }));
-      if(is_token_expired) {
+      if (is_token_expired) {
         throw new Error("expired token");
       }
 
@@ -26,7 +26,7 @@ const tokenVerification = (req, res, next) => {
       next();
     })
     .catch((e) => {
-      console.log(e)
+      console.log(e);
       return res.status(400).send({ message: e.message });
     });
 };
