@@ -6,8 +6,10 @@ const { tokenVerification } = require("../../middleware");
 
 // routes
 const send = require("./send");
+const respond = require("./respond");
 
 // register routes
 router.post("/send", [tokenVerification, send]);
+router.post("/respond", [tokenVerification, respond]);
 
 module.exports = router;
