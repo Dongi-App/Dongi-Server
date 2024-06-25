@@ -13,7 +13,7 @@ const addGroup = async (req, res) => {
     const group = await insertNewDocument("group", { name });
     await insertNewDocument("membership", {
       group: group._id.toString(),
-      user: req.user.email.toString(),
+      user: req.user.email,
     });
 
     return res.status(200).send({ group: group.serializer() });
