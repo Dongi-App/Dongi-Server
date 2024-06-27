@@ -1,4 +1,4 @@
-const { findOne, checkMembership } = require("../../../helpers");
+const { findOne, checkMembership, find } = require("../../../helpers");
 const Joi = require("joi");
 
 const schema = Joi.object({
@@ -12,9 +12,18 @@ const dataGroup = async (req, res) => {
 
     await checkMembership(id, req.user.email);
 
-    const group = await findOne("group", { _id: id });
+    let group = await findOne("group", { _id: id });
+    group = group.serializer();
 
-    return res.status(200).send({ group: group.serializer() });
+    const memberships = await find("membership", { group: id });
+    const members = [];
+    for (const membership of memberships) {
+      const member = await findOne("user", { email: membership.user });
+      members.push(member.serializer());
+    }
+    group.members = members;
+
+    return res.status(200).send({ group });
   } catch (e) {
     console.log(e);
     return res.status(400).send({ message: e.message });
@@ -22,3 +31,4 @@ const dataGroup = async (req, res) => {
 };
 
 module.exports = dataGroup;
+// TODO: add members
