@@ -24,11 +24,6 @@ app.use(morgan("short"));
 // * Api routes
 app.use("/api", routes);
 
-app.get("/", (req, res) => {
-  console.log("hello");
-  res.send("hello");
-});
-
 app.use("*", (req, res) => {
   res.send("Route not found");
 });

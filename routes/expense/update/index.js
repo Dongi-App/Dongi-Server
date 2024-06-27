@@ -90,7 +90,6 @@ const updateExpense = async (req, res) => {
 
       // append shares to response
       const up_to_date_shares = await find("share", { expense: expense_id });
-      console.log(up_to_date_shares);
       response.expense.shares = up_to_date_shares.map((up_to_date_share) => {
         return up_to_date_share.serializer();
       });
