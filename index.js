@@ -24,6 +24,10 @@ app.use(morgan("short"));
 // * Api routes
 app.use("/api", routes);
 
+app.get("/", (req, res) => {
+  res.send("Dongi-Server\n");
+});
+
 app.use("*", (req, res) => {
   res.send("Route not found");
 });
