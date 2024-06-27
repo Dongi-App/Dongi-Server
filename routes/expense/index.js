@@ -9,11 +9,13 @@ const add = require("./add");
 const remove = require("./remove");
 const update = require("./update");
 const list = require("./list");
+const data = require("./data");
 
 // register routes
 router.post("/add", [tokenVerification, add]);
 router.post("/remove", [tokenVerification, remove]);
 router.post("/update", [tokenVerification, update]);
 router.get("/list", [tokenVerification, list]);
+router.get("/data", [tokenVerification, data]);
 
 module.exports = router;
