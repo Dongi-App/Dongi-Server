@@ -1,4 +1,4 @@
-const { findOne, checkMembership, find } = require("../../../helpers");
+const { checkMembership, find } = require("../../../helpers");
 const Joi = require("joi");
 
 const schema = Joi.object({
