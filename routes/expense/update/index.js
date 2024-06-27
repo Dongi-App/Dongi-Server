@@ -5,6 +5,7 @@ const {
   checkExpenseOwnership,
   updateDocument,
   deleteDocument,
+  find,
 } = require("../../../helpers");
 const Joi = require("joi");
 
@@ -17,12 +18,12 @@ const schema = Joi.object({
   shares: Joi.array().items(
     Joi.object({
       user: Joi.string().email().required(),
-      share: Joi.number().required().greater(0),
+      share: Joi.number().required().min(0),
     })
   ),
 });
 
-const addExpense = async (req, res) => {
+const updateExpense = async (req, res) => {
   const { expense_id, payer, description, amount, date, shares } = req.body;
   try {
     await schema.validateAsync(req.body);
@@ -72,27 +73,42 @@ const addExpense = async (req, res) => {
     expense.amount = amount || expense.amount;
     expense.date = date || expense.date;
 
-    // update expense
-    await updateDocument(
-      "expense",
-      { _id: expense_id },
-      {
-        payer: expense.payer,
-        description: expense.description,
-        amount: expense.amount,
-        total_shares: expense.total_shares,
-        date: expense.date,
-      }
-    );
+    let response = { expense: expense.serializer() };
+    if (expense.total_shares !== 0) {
+      // update expense
+      await updateDocument(
+        "expense",
+        { _id: expense_id },
+        {
+          payer: expense.payer,
+          description: expense.description,
+          amount: expense.amount,
+          total_shares: expense.total_shares,
+          date: expense.date,
+        }
+      );
 
-    // append expense to response
-    const response = { expense };
+      // append shares to response
+      const up_to_date_shares = await find("share", { expense: expense_id });
+      console.log(up_to_date_shares);
+      response.expense.shares = up_to_date_shares.map((up_to_date_share) => {
+        return up_to_date_share.serializer();
+      });
 
-    // append shares to response
-    const up_to_date_shares = await findOne("share", { expense: expense_id });
-    response.expense.shares = up_to_date_shares.map((up_to_date_share) => {
-      up_to_date_share.serializer();
-    });
+      response.message = "expense updated";
+    } else {
+      // delete shares
+      await deleteDocument("share", {
+        expense: expense_id,
+      });
+
+      // delete expense
+      await deleteDocument("expense", {
+        _id: expense_id,
+      });
+
+      response.message = "expense deleted";
+    }
 
     return res.status(200).send(response);
   } catch (e) {
@@ -101,6 +117,4 @@ const addExpense = async (req, res) => {
   }
 };
 
-module.exports = addExpense;
-// TODO: test
-// TODO: handle the condition of total_shares = 0
+module.exports = updateExpense;
