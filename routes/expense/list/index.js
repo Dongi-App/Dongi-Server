@@ -5,7 +5,7 @@ const schema = Joi.object({
   group_id: Joi.string().required(),
 });
 
-const dataGroup = async (req, res) => {
+const listExpense = async (req, res) => {
   const { group_id } = req.query;
   try {
     await schema.validateAsync(req.query);
@@ -22,4 +22,4 @@ const dataGroup = async (req, res) => {
   }
 };
 
-module.exports = dataGroup;
+module.exports = listExpense;
