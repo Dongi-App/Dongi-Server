@@ -1,4 +1,8 @@
-const { insertNewDocument, checkMembership } = require("../../../helpers");
+const {
+  insertNewDocument,
+  checkMembership,
+  find,
+} = require("../../../helpers");
 const Joi = require("joi");
 
 const schema = Joi.object({
@@ -7,18 +11,10 @@ const schema = Joi.object({
   description: Joi.string().required().max(100),
   amount: Joi.number().required().greater(0).not(0),
   date: Joi.date().required().less(Date.now()),
-  shares: Joi.array()
-    .items(
-      Joi.object({
-        user: Joi.string().email().required(),
-        share: Joi.number().required().greater(0).not(0),
-      })
-    )
-    .required(),
 });
 
 const addExpense = async (req, res) => {
-  const { group, payer, description, amount, date, shares } = req.body;
+  const { group, payer, description, amount, date } = req.body;
   try {
     await schema.validateAsync(req.body);
 
@@ -26,12 +22,8 @@ const addExpense = async (req, res) => {
     await checkMembership(group, req.user.email);
     // check payer membership
     await checkMembership(group, payer);
-    // check shares membership and calc total shares
-    let totalShares = 0;
-    for (const share of shares) {
-      await checkMembership(group, share.user);
-      totalShares += +share.share;
-    }
+
+    const members = await find("membership", { group });
 
     const response = {};
     // create expense
@@ -40,18 +32,18 @@ const addExpense = async (req, res) => {
       payer,
       description,
       amount,
-      total_shares: totalShares,
+      total_shares: members.length,
       date,
     });
     response.expense = expenseObject.serializer();
 
     response.expense.shares = [];
     // create shares
-    for (const share of shares) {
+    for (const member of members) {
       const shareObject = await insertNewDocument("share", {
         expense: expenseObject._id,
-        user: share.user,
-        share: share.share,
+        user: member.user,
+        share: 1,
       });
       response.expense.shares.push(shareObject.serializer());
     }
